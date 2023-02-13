@@ -2,4 +2,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: lightgrey;
+}
+
+canvas {
+    background-color: #000;
 }
