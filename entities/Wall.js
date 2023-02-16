@@ -1,7 +1,7 @@
 //import BRICKS from "../utils/consts.js";
 import Entity from './Entity.js'
 
-export class Wall extends Entity {
+export default class Wall extends Entity {
   constructor(coords, size, type/* , index */) {
     super(coords, size)
     // this.coords = coords;

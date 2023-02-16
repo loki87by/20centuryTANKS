@@ -25,9 +25,9 @@ export default class Entity {
     } else if (direction === 'north') {
         this.coords.y -= speed * POINT
     } else if (direction === 'west') {
-        this.coords.y -= speed * POINT
+        this.coords.x -= speed * POINT
     } else {
-        this.coords.y += speed * POINT  
+        this.coords.x += speed * POINT  
     }
   }
 }

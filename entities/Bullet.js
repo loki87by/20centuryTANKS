@@ -1,6 +1,6 @@
 import Entity from './Entity.js'
 
-export class Bullet extends Entity {
+export default class Bullet extends Entity {
   constructor(coords, size, direction, owner, speed, power) {
     super(coords, size)
     // this.coords = coords;

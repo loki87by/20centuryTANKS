@@ -1,7 +1,7 @@
 import Entity from "./Entity.js";
 import Bullet from "./Bullet.js";
 
-export class Tank extends Entity {
+export default class Tank extends Entity {
   constructor(coords, size, direction, command, gamer, speed) {
     super(coords, size);
     //this.coords = coords;
@@ -56,6 +56,10 @@ export class Tank extends Entity {
       this.isGun
     );
     return bullet
+  }
+
+  rotate(dir) {
+    this.direction = dir
   }
 
   step() {
