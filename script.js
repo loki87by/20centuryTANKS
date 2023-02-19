@@ -1,6 +1,6 @@
 import LEVELS from "./utils/levels.js";
 import { POINT, CTX } from "./utils/consts.js";
-import { screenSize } from "./utils/helpers.js";
+import { screenSize, collides } from "./utils/helpers.js";
 import { setBrick, setStone, setTank } from "./utils/painters.js";
 import Wall from "./entities/Wall.js";
 import Tank from "./entities/Tank.js";
@@ -20,8 +20,8 @@ LEVELS[level].forEach((item, index) => {
   for (let i = 0; i < item.length; i++) {
     if (item[i] !== "") {
       const coords = {
-        x: i * 20 + 10,
-        y: index * 20 + 10,
+        x: Math.floor(i * 20 * POINT + 10 * POINT),
+        y: Math.floor(index * 20 * POINT + 10 * POINT),
       };
       const wall = new Wall(coords, 20, item[i]);
       MAP.push(wall);
@@ -31,10 +31,10 @@ LEVELS[level].forEach((item, index) => {
 
 //tanks
 const coords = {
-  x: 190,
-  y: 490,
+  x: 180 * POINT,
+  y: 490 * POINT,
 };
-const tank = new Tank(coords, 40, "north", "players", 1, 1);
+const tank = new Tank(coords, 40, "north", "players", 1, 6);
 TANKS.push(tank);
 
 //events
@@ -45,7 +45,14 @@ function tankControls(e) {
     if (TANKS[0].getData().direction !== direction) {
       TANKS[0].rotate(direction);
     }
-    TANKS[0].step();
+
+    console.log(
+      !MAP.some((item) => collides(item, TANKS[0].getData().prestep))
+    );
+
+    if (!MAP.some((item) => collides(item, TANKS[0].getData().prestep))) {
+      TANKS[0].step();
+    }
   }
 
   if (e.code === "ArrowDown") {
@@ -54,7 +61,14 @@ function tankControls(e) {
     if (TANKS[0].getData().direction !== direction) {
       TANKS[0].rotate(direction);
     }
-    TANKS[0].step();
+
+    console.log(
+      !MAP.some((item) => collides(item, TANKS[0].getData().prestep))
+    );
+
+    if (!MAP.some((item) => collides(item, TANKS[0].getData().prestep))) {
+      TANKS[0].step();
+    }
   }
 
   if (e.code === "ArrowLeft") {
@@ -63,7 +77,14 @@ function tankControls(e) {
     if (TANKS[0].getData().direction !== direction) {
       TANKS[0].rotate(direction);
     }
-    TANKS[0].step();
+
+    console.log(
+      !MAP.some((item) => collides(item, TANKS[0].getData().prestep))
+    );
+
+    if (!MAP.some((item) => collides(item, TANKS[0].getData().prestep))) {
+      TANKS[0].step();
+    }
   }
 
   if (e.code === "ArrowRight") {
@@ -72,7 +93,14 @@ function tankControls(e) {
     if (TANKS[0].getData().direction !== direction) {
       TANKS[0].rotate(direction);
     }
-    TANKS[0].step();
+
+    console.log(
+      !MAP.some((item) => collides(item, TANKS[0].getData().prestep))
+    );
+
+    if (!MAP.some((item) => collides(item, TANKS[0].getData().prestep))) {
+      TANKS[0].step();
+    }
   }
 }
 
@@ -89,16 +117,17 @@ function loop() {
     const data = item.getData();
 
     if (data.type === "b") {
-      setBrick(data.x, data.y, data.width, data.height);
+      setBrick(data.coords.x, data.coords.y, data.width, data.height);
     }
 
     if (data.type === "s") {
-      setStone(data.x, data.y, data.width, data.height);
+      setStone(data.coords.x, data.coords.y, data.width, data.height);
     }
   });
+
   TANKS.forEach((tank) => {
     const data = tank.getData();
-    setTank(data.x, data.y, data.direction, data.gamer);
+    setTank(data.coords.x, data.coords.y, data.direction, data.gamer);
   });
 }
 

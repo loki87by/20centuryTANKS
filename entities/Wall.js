@@ -1,19 +1,15 @@
-//import BRICKS from "../utils/consts.js";
-import Entity from './Entity.js'
+import Entity from "./Entity.js";
 
 export default class Wall extends Entity {
-  constructor(coords, size, type/* , index */) {
-    super(coords, size)
-    // this.coords = coords;
+  constructor(coords, size, type) {
+    super(coords, size);
     this.type = type;
-    //this.bricks = this.type === "bricks" ? BRICKS[index] % 2 : null;
   }
 
   getData() {
-    const data = super._getData()
-    data.type = this.type
-    //data.bricks = this.bricks
-    return data
+    const data = super._getData();
+    data.type = this.type;
+    return data;
   }
 
   changeBricks(direction) {
