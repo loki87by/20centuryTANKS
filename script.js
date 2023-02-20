@@ -1,6 +1,6 @@
 import LEVELS from "./utils/levels.js";
 import { POINT, CTX } from "./utils/consts.js";
-import { screenSize, collides } from "./utils/helpers.js";
+import { screenSize, collides, getCollideCoords } from "./utils/helpers.js";
 import { setBrick, setStone, setTank } from "./utils/painters.js";
 import Wall from "./entities/Wall.js";
 import Tank from "./entities/Tank.js";
@@ -12,6 +12,8 @@ const requestAnimationFrame =
   window.msRequestAnimationFrame;
 
 let level = 0;
+let count = 0;
+let frame = null
 const MAP = [];
 const TANKS = [];
 
@@ -31,10 +33,10 @@ LEVELS[level].forEach((item, index) => {
 
 //tanks
 const coords = {
-  x: 180 * POINT,
-  y: 490 * POINT,
+  x: Math.floor(180 * POINT),
+  y: Math.floor(490 * POINT),
 };
-const tank = new Tank(coords, 40, "north", "players", 1, 6);
+const tank = new Tank(coords, 40, "north", "players", 1, Math.floor(POINT));
 TANKS.push(tank);
 
 //events
@@ -46,12 +48,28 @@ function tankControls(e) {
       TANKS[0].rotate(direction);
     }
 
-    console.log(
-      !MAP.some((item) => collides(item, TANKS[0].getData().prestep))
-    );
+    if (TANKS[0].getData().prestep.coords.y < POINT * 10) {
+      TANKS[0].replace(TANKS[0].getData().coords.x, POINT * 10);
+      return;
+    }
 
-    if (!MAP.some((item) => collides(item, TANKS[0].getData().prestep))) {
+    if (
+      !MAP.some((item) => {
+        if (
+          TANKS[0].getData().prestep.coords.y <=
+          item.coords.y + item.height
+        ) {
+          return collides(item, TANKS[0].getData().prestep);
+        }
+      })
+    ) {
       TANKS[0].step();
+    } else {
+      const index = MAP.findIndex((item) =>
+        collides(item, TANKS[0].getData().prestep)
+      );
+      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
+      TANKS[0].replace(x, y);
     }
   }
 
@@ -62,12 +80,35 @@ function tankControls(e) {
       TANKS[0].rotate(direction);
     }
 
-    console.log(
-      !MAP.some((item) => collides(item, TANKS[0].getData().prestep))
-    );
+    if (
+      TANKS[0].getData().prestep.coords.y >
+      POINT * 530 - TANKS[0].getData().height
+    ) {
+      TANKS[0].replace(
+        TANKS[0].getData().coords.x,
+        POINT * 530 - TANKS[0].getData().height
+      );
+      return;
+    }
 
-    if (!MAP.some((item) => collides(item, TANKS[0].getData().prestep))) {
+    if (
+      !MAP.some((item) => {
+        if (
+          TANKS[0].getData().prestep.coords.y +
+            TANKS[0].getData().prestep.height >=
+          item.coords.y
+        ) {
+          return collides(item, TANKS[0].getData().prestep);
+        }
+      })
+    ) {
       TANKS[0].step();
+    } else {
+      const index = MAP.findIndex((item) =>
+        collides(item, TANKS[0].getData().prestep)
+      );
+      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
+      TANKS[0].replace(x, y);
     }
   }
 
@@ -78,12 +119,25 @@ function tankControls(e) {
       TANKS[0].rotate(direction);
     }
 
-    console.log(
-      !MAP.some((item) => collides(item, TANKS[0].getData().prestep))
-    );
+    if (TANKS[0].getData().prestep.coords.x < POINT * 10) {
+      TANKS[0].replace(Math.floor(POINT * 10), TANKS[0].getData().coords.y);
+      return;
+    }
 
-    if (!MAP.some((item) => collides(item, TANKS[0].getData().prestep))) {
+    if (
+      !MAP.some((item) => {
+        if (TANKS[0].getData().prestep.coords.x <= item.coords.x + item.width) {
+          return collides(item, TANKS[0].getData().prestep);
+        }
+      })
+    ) {
       TANKS[0].step();
+    } else {
+      const index = MAP.findIndex((item) =>
+        collides(item, TANKS[0].getData().prestep)
+      );
+      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
+      TANKS[0].replace(x, y);
     }
   }
 
@@ -94,12 +148,35 @@ function tankControls(e) {
       TANKS[0].rotate(direction);
     }
 
-    console.log(
-      !MAP.some((item) => collides(item, TANKS[0].getData().prestep))
-    );
+    if (
+      TANKS[0].getData().prestep.coords.x >
+      POINT * 530 - TANKS[0].getData().width
+    ) {
+      TANKS[0].replace(
+        POINT * 530 - TANKS[0].getData().width,
+        TANKS[0].getData().coords.y
+      );
+      return;
+    }
 
-    if (!MAP.some((item) => collides(item, TANKS[0].getData().prestep))) {
+    if (
+      !MAP.some((item) => {
+        if (
+          TANKS[0].getData().prestep.coords.x +
+            TANKS[0].getData().prestep.width >=
+          item.coords.x
+        ) {
+          return collides(item, TANKS[0].getData().prestep);
+        }
+      })
+    ) {
       TANKS[0].step();
+    } else {
+      const index = MAP.findIndex((item) =>
+        collides(item, TANKS[0].getData().prestep)
+      );
+      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
+      TANKS[0].replace(x, y);
     }
   }
 }
@@ -108,7 +185,13 @@ function tankControls(e) {
 screenSize();
 
 function loop() {
-  requestAnimationFrame(loop);
+  frame = requestAnimationFrame(loop);
+
+  if (++count < 6 - Math.floor(POINT)) {
+    return;
+  }
+
+  count = 0;
   CTX.clearRect(0, 0, POINT * 540, POINT * 540);
   CTX.fillStyle = "lightgrey";
   CTX.fillRect(0, 0, POINT * 540, POINT * 540);
@@ -131,5 +214,5 @@ function loop() {
   });
 }
 
-requestAnimationFrame(loop);
+frame = requestAnimationFrame(loop);
 document.addEventListener("keydown", tankControls);

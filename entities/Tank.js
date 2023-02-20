@@ -8,7 +8,7 @@ export default class Tank extends Entity {
     this.direction = direction;
     this.command = command;
     this.health = 100;
-    this.speed = speed || 6;
+    this.speed = speed || Math.floor(POINT);
     this.gamer = gamer || "auto";
     this.hasGun = false;
     this.isSheep = false;
@@ -80,5 +80,9 @@ export default class Tank extends Entity {
 
   step() {
     super._step(this.direction, this.speed);
+  }
+
+  replace(x, y) {
+    super._replace(x, y)
   }
 }

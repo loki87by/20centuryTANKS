@@ -27,4 +27,9 @@ export default class Entity {
       this.coords.x += Math.floor(speed * POINT);
     }
   }
+
+  _replace(x, y) {
+    this.coords.x = x
+    this.coords.y = y
+  }
 }
