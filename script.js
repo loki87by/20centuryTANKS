@@ -1,7 +1,7 @@
 import LEVELS from "./utils/levels.js";
 import { POINT, CTX } from "./utils/consts.js";
 import { screenSize, collides, getCollideCoords } from "./utils/helpers.js";
-import { setBrick, setStone, setTank } from "./utils/painters.js";
+import { setBrick, setStone, setTank, setBullet } from "./utils/painters.js";
 import Wall from "./entities/Wall.js";
 import Tank from "./entities/Tank.js";
 
@@ -13,9 +13,10 @@ const requestAnimationFrame =
 
 let level = 0;
 let count = 0;
-let frame = null
+let frame = null;
 const MAP = [];
 const TANKS = [];
+const BULLETS = [];
 
 //map
 LEVELS[level].forEach((item, index) => {
@@ -36,11 +37,49 @@ const coords = {
   x: Math.floor(180 * POINT),
   y: Math.floor(490 * POINT),
 };
-const tank = new Tank(coords, 40, "north", "players", 1, Math.floor(POINT));
+const tank = new Tank(
+  coords,
+  40,
+  0,
+  0,
+  "north",
+  TANKS.length,
+  "players",
+  1,
+  Math.floor(10 * POINT)
+);
 TANKS.push(tank);
+
+function shiftToTarget(shifting, targets, direction) {
+  const index = targets.findIndex((item) =>
+    collides(item, shifting.getData().prestep)
+  );
+  const { x, y } = getCollideCoords(targets[index], shifting, direction);
+  shifting.replace(x, y);
+  shifting.stop();
+}
+
+function endCanvas(obj, x, y) {
+  obj.replace(x, y);
+  obj.stop();
+
+  if (obj.owner) {
+    const index = BULLETS.findIndex((item) => item.owner === obj.owner);
+    BULLETS.splice(index, 1);
+  }
+}
 
 //events
 function tankControls(e) {
+  if (e.code === "Space") {
+    console.log(BULLETS.some((i) => i.owner == TANKS[0].id));
+    if (BULLETS.some((i) => i.owner == TANKS[0].id)) {
+      return;
+    }
+    BULLETS.push(TANKS[0].gang());
+    BULLETS[0].step();
+  }
+
   if (e.code === "ArrowUp") {
     const direction = "north";
 
@@ -49,7 +88,7 @@ function tankControls(e) {
     }
 
     if (TANKS[0].getData().prestep.coords.y < POINT * 10) {
-      TANKS[0].replace(TANKS[0].getData().coords.x, POINT * 10);
+      endCanvas(TANKS[0], TANKS[0].getData().coords.x, POINT * 10);
       return;
     }
 
@@ -65,11 +104,7 @@ function tankControls(e) {
     ) {
       TANKS[0].step();
     } else {
-      const index = MAP.findIndex((item) =>
-        collides(item, TANKS[0].getData().prestep)
-      );
-      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
-      TANKS[0].replace(x, y);
+      shiftToTarget(TANKS[0], MAP, direction);
     }
   }
 
@@ -84,7 +119,8 @@ function tankControls(e) {
       TANKS[0].getData().prestep.coords.y >
       POINT * 530 - TANKS[0].getData().height
     ) {
-      TANKS[0].replace(
+      endCanvas(
+        TANKS[0],
         TANKS[0].getData().coords.x,
         POINT * 530 - TANKS[0].getData().height
       );
@@ -104,11 +140,7 @@ function tankControls(e) {
     ) {
       TANKS[0].step();
     } else {
-      const index = MAP.findIndex((item) =>
-        collides(item, TANKS[0].getData().prestep)
-      );
-      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
-      TANKS[0].replace(x, y);
+      shiftToTarget(TANKS[0], MAP, direction);
     }
   }
 
@@ -120,7 +152,7 @@ function tankControls(e) {
     }
 
     if (TANKS[0].getData().prestep.coords.x < POINT * 10) {
-      TANKS[0].replace(Math.floor(POINT * 10), TANKS[0].getData().coords.y);
+      endCanvas(TANKS[0], Math.floor(POINT * 10), TANKS[0].getData().coords.y);
       return;
     }
 
@@ -133,11 +165,7 @@ function tankControls(e) {
     ) {
       TANKS[0].step();
     } else {
-      const index = MAP.findIndex((item) =>
-        collides(item, TANKS[0].getData().prestep)
-      );
-      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
-      TANKS[0].replace(x, y);
+      shiftToTarget(TANKS[0], MAP, direction);
     }
   }
 
@@ -152,10 +180,16 @@ function tankControls(e) {
       TANKS[0].getData().prestep.coords.x >
       POINT * 530 - TANKS[0].getData().width
     ) {
-      TANKS[0].replace(
+      endCanvas(
+        TANKS[0],
         POINT * 530 - TANKS[0].getData().width,
         TANKS[0].getData().coords.y
       );
+      /* TANKS[0].replace(
+        POINT * 530 - TANKS[0].getData().width,
+        TANKS[0].getData().coords.y
+      );
+      TANKS[0].stop(); */
       return;
     }
 
@@ -172,12 +206,19 @@ function tankControls(e) {
     ) {
       TANKS[0].step();
     } else {
-      const index = MAP.findIndex((item) =>
-        collides(item, TANKS[0].getData().prestep)
-      );
-      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
-      TANKS[0].replace(x, y);
+      shiftToTarget(TANKS[0], MAP, direction);
     }
+  }
+}
+
+function tankStopped(e) {
+  if (
+    e.code === "ArrowUp" ||
+    e.code === "ArrowDown" ||
+    e.code === "ArrowLeft" ||
+    e.code === "ArrowRight"
+  ) {
+    TANKS[0].stop();
   }
 }
 
@@ -187,7 +228,7 @@ screenSize();
 function loop() {
   frame = requestAnimationFrame(loop);
 
-  if (++count < 6 - Math.floor(POINT)) {
+  if (++count < 30 - Math.floor(POINT)) {
     return;
   }
 
@@ -211,8 +252,51 @@ function loop() {
   TANKS.forEach((tank) => {
     const data = tank.getData();
     setTank(data.coords.x, data.coords.y, data.direction, data.gamer);
+    tank.replace(data.coords.x + data.dx, data.coords.y + data.dy);
+  });
+
+  BULLETS.forEach((bullet) => {
+    const data = bullet.getData();
+    setBullet(data.coords.x, data.coords.y, data.direction, data.power);
+
+    if (bullet.getData().prestep.coords.y < POINT * 10) {
+      endCanvas(bullet, bullet.getData().coords.x, POINT * 10);
+    }
+
+    if (
+      bullet.getData().prestep.coords.x >
+      POINT * 530 - bullet.getData().width
+    ) {
+      endCanvas(
+        bullet,
+        POINT * 530 - bullet.getData().width,
+        bullet.getData().coords.y
+      );
+    }
+
+    if (bullet.getData().prestep.coords.x < POINT * 10) {
+      endCanvas(bullet, Math.floor(POINT * 10), bullet.getData().coords.y);
+    }
+
+    if (
+      bullet.getData().prestep.coords.y >
+      POINT * 530 - bullet.getData().height
+    ) {
+      endCanvas(
+        bullet,
+        bullet.getData().coords.x,
+        POINT * 530 - bullet.getData().height
+      );
+    }
+    bullet.replace(data.coords.x + data.dx, data.coords.y + data.dy);
+    MAP.forEach((item) => {
+      if (collides(item, bullet.getData().prestep)) {
+        bullet.stop();
+      }
+    });
   });
 }
 
 frame = requestAnimationFrame(loop);
 document.addEventListener("keydown", tankControls);
+document.addEventListener("keyup", tankStopped);

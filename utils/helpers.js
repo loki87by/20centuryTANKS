@@ -20,7 +20,7 @@ export function collides(obj1, obj2) {
 
 export function getCollideCoords(obj1, obj2, direction) {
   const coords = {};
-
+  
   if (direction === "north") {
     coords.x = obj2.coords.x;
     coords.y = obj1.coords.y + obj1.height;
@@ -40,6 +40,5 @@ export function getCollideCoords(obj1, obj2, direction) {
     coords.x = obj1.coords.x - obj2.width;
     coords.y = obj2.coords.y;
   }
-//console.log(obj1, obj2, coords)
   return coords;
 }

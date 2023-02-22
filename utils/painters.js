@@ -125,3 +125,30 @@ export function setTank(x, y, dir, gamer) {
     getPlayerTank(x, y, checkpoints);
   }
 }
+
+export function setBullet(x, y, dir, gun) {
+  let size = Math.floor(2 * C.POINT)
+
+  if (gun) {
+    size = Math.floor(4 * C.POINT)
+  }
+
+  C.CTX.fillStyle = "white";
+
+  if(dir === 'north') {
+    C.CTX.fillRect(x - size / 2, y - 3 * size, size, 3 * size);
+  }
+
+  if(dir === 'south') {
+    C.CTX.fillRect(x - size / 2, y, size, 3 * size);
+  }
+
+  if(dir === 'west') {
+    C.CTX.fillRect(x - 3 * size, y - size / 2, 3 * size, size);
+  }
+
+  if(dir === 'east') {
+    C.CTX.fillRect(x, y - size / 2, 3 * size, size);
+  }
+
+}

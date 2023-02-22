@@ -3,12 +3,13 @@ import Bullet from "./Bullet.js";
 import { POINT } from "../utils/consts.js";
 
 export default class Tank extends Entity {
-  constructor(coords, size, direction, command, gamer, speed) {
-    super(coords, size);
+  constructor(coords, size, dx, dy, direction, id, command, gamer, speed) {
+    super(coords, size, dx, dy);
     this.direction = direction;
+    this.id = id;
     this.command = command;
     this.health = 100;
-    this.speed = speed || Math.floor(POINT);
+    this.speed = speed || Math.floor(10 * POINT);
     this.gamer = gamer || "auto";
     this.hasGun = false;
     this.isSheep = false;
@@ -17,22 +18,22 @@ export default class Tank extends Entity {
   }
 
   _prestep() {
-    let data = JSON.parse(JSON.stringify(super._getData()));
+    let data = JSON.parse(JSON.stringify(this._getData()));
 
     if (this.direction === "south") {
-      data.coords.y += Math.floor(this.speed * POINT);
+      data.coords.y += this.dy
     } else if (this.direction === "north") {
-      data.coords.y -= Math.floor(this.speed * POINT);
+      data.coords.y += this.dy
     } else if (this.direction === "west") {
-      data.coords.x -= Math.floor(this.speed * POINT);
+      data.coords.x += this.dx
     } else {
-      data.coords.x += Math.floor(this.speed * POINT);
+      data.coords.x += this.dx
     }
     return data;
   }
 
   getData() {
-    const data = super._getData();
+    const data = super._getData()
     data.direction = this.direction;
     data.command = this.command;
     data.health = this.health;
@@ -48,27 +49,38 @@ export default class Tank extends Entity {
 
   gang() {
     const coords = {
-      x: this.getData().x,
-      y: this.getData().y,
+      x: this.getData().coords.x,
+      y: this.getData().coords.y,
     };
+    const gangDirection = {
+      dx: 0,
+      dy: 0
+    }
+    const speed = this.hasStar || this.hasGun ? Math.floor(30 * POINT) : Math.floor(25 * POINT)
 
     if (this.direction === "south") {
-      coords.x += this.getData().width / 2;
+      coords.x += Math.floor(this.getData().width / 2);
       coords.y += this.getData().height;
+      gangDirection.dy = speed
     } else if (this.direction === "north") {
-      coords.x += this.getData().width / 2;
+      coords.x += Math.floor(this.getData().width / 2);
+      gangDirection.dy = -speed
     } else if (this.direction === "west") {
-      coords.y += this.getData().height / 2;
+      coords.y += Math.floor(this.getData().height / 2);
+      gangDirection.dx = -speed
     } else {
       coords.x += this.getData().width;
-      coords.y += this.getData().height / 2;
+      coords.y += Math.floor(this.getData().height / 2);
+      gangDirection.dx = speed
     }
+    const { dx, dy } = gangDirection
     const bullet = new Bullet(
       coords,
-      this.size,
+      Math.floor(4 * POINT),
+      dx, dy,
       this.direction,
-      this.gamer,
-      data.hasStar || data.hasGun ? 15 : 10,
+      `${this.id}`,
+      this.hasStar || this.hasGun ? Math.floor(30 * POINT) : Math.floor(25 * POINT),
       this.isGun
     );
     return bullet;
@@ -80,6 +92,10 @@ export default class Tank extends Entity {
 
   step() {
     super._step(this.direction, this.speed);
+  }
+
+  stop() {
+    super._stop()
   }
 
   replace(x, y) {

@@ -1,9 +1,8 @@
 import Entity from './Entity.js'
 
 export default class Bullet extends Entity {
-  constructor(coords, size, direction, owner, speed, power) {
-    super(coords, size)
-    // this.coords = coords;
+  constructor(coords, size, dx, dy, direction, owner, speed, power) {
+    super(coords, size, dx, dy)
     this.direction = direction;
     this.owner = owner;
     this.speed = speed;
@@ -11,16 +10,31 @@ export default class Bullet extends Entity {
   }
 
   step() {
-    super._step(this.direction, this.speed)
-  /*   if (this.direction === 'south') {
-        this.coords.y += this.speed
-    } else if (this.direction === 'north') {
-        this.coords.y -= this.speed
-    } else if (this.direction === 'west') {
-        this.coords.y -= this.speed
+      super._step(this.direction, this.speed)
+  }
+
+  _prestep() {
+    
+    let data = JSON.parse(JSON.stringify(this._getData()));
+
+    if (this.direction === "south") {
+      data.coords.y += this.dy
+    } else if (this.direction === "north") {
+      data.coords.y += this.dy
+    } else if (this.direction === "west") {
+      data.coords.x += this.dx
     } else {
-        this.coords.y += this.speed
-    } */
+      data.coords.x += this.dx
+    }
+    return data;
+  }
+
+  stop() {
+    super._stop()
+  }
+
+  replace(x, y) {
+    super._replace(x, y)
   }
 
   getData() {
@@ -29,6 +43,7 @@ export default class Bullet extends Entity {
     data.power = this.power
     data.speed = this.speed
     data.owner = this.owner
+    data.prestep = this._prestep();
     return data
   }
 }
