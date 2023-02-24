@@ -35,6 +35,7 @@ export function setBrick(x, y, w, h, part) {
   C.CTX.lineWidth = 1;
       C.CTX.moveTo(x + w - 1, y);
       C.CTX.lineTo(x + w - 1, y + h / 2);
+  C.CTX.lineWidth = 2;
     }
 
     if (part === "right") {
