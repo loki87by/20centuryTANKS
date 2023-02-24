@@ -101,7 +101,7 @@ function tankControls(e) {
           TANKS[0].getData().prestep.coords.y <=
           item.coords.y + item.height
         ) {
-          console.log(collides(item, TANKS[0].getData().prestep), item)
+          console.log(collides(item, TANKS[0].getData().prestep), item, TANKS[0].getData())
           return collides(item, TANKS[0].getData().prestep);
         }
       })
