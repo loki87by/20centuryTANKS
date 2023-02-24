@@ -43,7 +43,7 @@ const tank = new Tank(
   "north",
   TANKS.length,
   "players",
-  10,
+  15,
   Math.floor(POINT)
 );
 TANKS.push(tank);
@@ -315,16 +315,17 @@ function loop() {
             clone2.coords.x += clone2.width
             clones.push(clone2)
           }
-          console.log(collides(friend, clones[0]))
+          console.log(friend, clones[0], collides(friend, clones[0]))
           if (collides(friend, clones[0])) {
             friend.destroy(data.direction)
           }
-          console.log(collides(friend, clones[1]))
+          console.log(collides(friend, clones[1], friend, clones[1]))
           if (collides(friend, clones[1])) {
             friend.destroy(data.direction)
           }
         })
         endCanvas(bullet, bullet.getData().coords.x, bullet.getData().coords.y)
+        return
       }
     });
   });
