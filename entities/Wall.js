@@ -18,10 +18,10 @@ export default class Wall extends Entity {
     }
 
     if (direction === "south") {
-      this.type += "-up";
+      this.type += "-down";
       this.height /= 2
     } else if (direction === "north") {
-      this.type += "-down";
+      this.type += "-up";
       this.coords.y += this.height / 2 
       this.height /= 2
     } else if (direction === "west") {
