@@ -80,7 +80,7 @@ export default class Tank extends Entity {
       dx, dy,
       this.direction,
       `${this.id}`,
-      this.hasStar || this.hasGun ? Math.floor(30 * POINT) : Math.floor(25 * POINT),
+      speed,
       this.isGun
     );
     return bullet;
