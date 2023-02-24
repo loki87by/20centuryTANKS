@@ -299,10 +299,12 @@ function loop() {
         shiftToTarget(bullet, MAP, data.direction);
         item.destroy(data.direction)
         friendlyItems.forEach((friend) => {
+          console.log(collides(friend, bullet.getData()))
           if (collides(friend, bullet.getData())) {
             friend.destroy(data.direction)
           }
         })
+        endCanvas(bullet, bullet.getData().coords.x, bullet.getData().coords.y)
       }
     });
   });
