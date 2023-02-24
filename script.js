@@ -12,8 +12,6 @@ const requestAnimationFrame =
   window.msRequestAnimationFrame;
 
 let level = 0;
-//let count = 0;
-//let frame = null;
 const MAP = [];
 const TANKS = [];
 const BULLETS = [];
@@ -220,16 +218,7 @@ function tankStopped(e) {
 screenSize();
 
 function loop() {
-  //frame = 
     requestAnimationFrame(loop);
-    /*console.log(count)
-
-  if (++count < 300 - Math.floor(POINT)) {
-    console.log(count)
-    return;
-  }
-
-  count = 0;*/
   CTX.clearRect(0, 0, POINT * 540, POINT * 540);
   CTX.fillStyle = "lightgrey";
   CTX.fillRect(0, 0, POINT * 540, POINT * 540);
@@ -320,10 +309,11 @@ function loop() {
             clone2.coords.x += clone2.width
             clones.push(clone2)
           }
-          console.log(collides(friend, bullet.getData()))
+          console.log(collides(friend, clones[0]))
           if (collides(friend, clones[0])) {
             friend.destroy(data.direction)
           }
+          console.log(collides(friend, clones[1]))
           if (collides(friend, clones[1])) {
             friend.destroy(data.direction)
           }
@@ -334,7 +324,6 @@ function loop() {
   });
 }
 
-//frame = 
   requestAnimationFrame(loop);
 document.addEventListener("keydown", tankControls);
 document.addEventListener("keyup", tankStopped);
