@@ -51,12 +51,16 @@ const tank = new Tank(
 TANKS.push(tank);
 
 function shiftToTarget(shifting, targets, direction) {
+  console.log(shifting, targets, direction)
   const index = targets.findIndex((item) =>
     collides(item, shifting.getData().prestep)
   );
+  console.log(index)
   const { x, y } = getCollideCoords(targets[index], shifting, direction);
+  console.log(x,y)
   shifting.replace(x, y);
   shifting.stop();
+  console.log(shifting)
 }
 
 function endCanvas(obj, x, y) {
