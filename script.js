@@ -43,8 +43,8 @@ const tank = new Tank(
   "north",
   TANKS.length,
   "players",
-  15,
-  Math.floor(POINT)
+  1,
+  Math.floor(10 * POINT)
 );
 TANKS.push(tank);
 
