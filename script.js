@@ -101,14 +101,19 @@ function tankControls(e) {
           TANKS[0].getData().prestep.coords.y <=
           item.coords.y + item.height
         ) {
-          console.log(collides(item, TANKS[0].getData().prestep), item, TANKS[0].getData())
+          console.log(collides(item, TANKS[0].getData().prestep))
           return collides(item, TANKS[0].getData().prestep);
         }
       })
     ) {
       TANKS[0].step();
     } else {
-      shiftToTarget(TANKS[0], MAP, direction);
+      //shiftToTarget(TANKS[0], MAP, direction);
+      const index = MAP.findIndex((item) =>
+        collides(item, TANKS[0].getData().prestep)
+      );
+      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
+      TANKS[0].replace(x, y);
     }
   }
 
