@@ -9,7 +9,7 @@ export default class Tank extends Entity {
     this.id = id;
     this.command = command;
     this.health = 100;
-    this.speed = speed || Math.floor(1 * POINT);
+    this.speed = speed || Math.floor(10 * POINT);
     this.gamer = gamer || "auto";
     this.hasGun = false;
     this.isSheep = false;
@@ -56,7 +56,7 @@ export default class Tank extends Entity {
       dx: 0,
       dy: 0
     }
-    const speed = this.hasStar || this.hasGun ? Math.floor(6 * POINT) : Math.floor(5 * POINT)
+    const speed = this.hasStar || this.hasGun ? Math.floor(20 * POINT) : Math.floor(15 * POINT)
 
     if (this.direction === "south") {
       coords.x += Math.floor(this.getData().width / 2);
