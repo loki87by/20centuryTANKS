@@ -57,7 +57,6 @@ function shiftToTarget(shifting, targets, direction) {
   const { x, y } = getCollideCoords(targets[index], shifting, direction);
   shifting.replace(x, y);
   shifting.stop();
-  console.log(shifting)
 }
 
 function endCanvas(obj, x, y) {
@@ -98,20 +97,13 @@ function tankControls(e) {
           TANKS[0].getData().prestep.coords.y <=
           item.coords.y + item.height
         ) {
-          console.log(collides(item, TANKS[0].getData().prestep))
           return collides(item, TANKS[0].getData().prestep);
         }
       })
     ) {
       TANKS[0].step();
     } else {
-      // shiftToTarget(TANKS[0], MAP, direction);
-      const index = MAP.findIndex((item) =>
-        collides(item, TANKS[0].getData().prestep)
-      );
-      const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
-      TANKS[0].replace(x, y);
-  TANKS[0].stop();
+      shiftToTarget(TANKS[0], MAP, direction);
     }
   }
 
@@ -138,7 +130,7 @@ function tankControls(e) {
       !MAP.some((item) => {
         if (
           TANKS[0].getData().prestep.coords.y +
-            TANKS[0].getData().prestep.height >=
+            TANKS[0].getData().height >=
           item.coords.y
         ) {
           return collides(item, TANKS[0].getData().prestep);
@@ -199,7 +191,7 @@ function tankControls(e) {
       !MAP.some((item) => {
         if (
           TANKS[0].getData().prestep.coords.x +
-            TANKS[0].getData().prestep.width >=
+            TANKS[0].getData().width >=
           item.coords.x
         ) {
           return collides(item, TANKS[0].getData().prestep);
