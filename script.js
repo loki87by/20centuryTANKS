@@ -298,21 +298,37 @@ function loop() {
         friendlyItems.forEach((friend) => {
           const clones = []
           if(data.direction === 'west' || data.direction === 'east') {
-            const clone1 = JSON.parse(JSON.stringify(bullet.getData().prestep))
+            const clone1 = JSON.parse(JSON.stringify(bullet.getData()))
             clone1.coords.y -= clone1.height
             clones.push(clone1)
-            const clone2 = JSON.parse(JSON.stringify(bullet.getData().prestep))
+            const clone2 = JSON.parse(JSON.stringify(bullet.getData()))
             clone2.coords.y += clone2.height
             clones.push(clone2)
+            if(data.direction === 'west') {
+              clone1.coords.x -= 1
+              clone2.coords.x -= 1
+            }
+            if(data.direction === 'east') {
+              clone1.coords.x += 1
+              clone2.coords.x += 1
+            }
           }
           
           if(data.direction === 'north' || data.direction === 'south') {
-            const clone1 = JSON.parse(JSON.stringify(bullet.getData().prestep))
+            const clone1 = JSON.parse(JSON.stringify(bullet.getData()))
             clone1.coords.x -= clone1.width
             clones.push(clone1)
-            const clone2 = JSON.parse(JSON.stringify(bullet.getData().prestep))
+            const clone2 = JSON.parse(JSON.stringify(bullet.getData()))
             clone2.coords.x += clone2.width
             clones.push(clone2)
+            if(data.direction === 'north') {
+              clone1.coords.y -= 1
+              clone2.coords.y -= 1
+            }
+            if(data.direction === 'south') {
+              clone1.coords.y += 1
+              clone2.coords.y += 1
+            }
           }
           console.log(friend, clones[0], collides(friend, clones[0]))
           if (collides(friend, clones[0])) {
