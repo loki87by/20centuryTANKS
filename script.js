@@ -45,7 +45,7 @@ const tank = new Tank(
   "north",
   TANKS.length,
   "players",
-  1,
+  6,
   Math.floor(POINT)
 );
 TANKS.push(tank);
@@ -302,8 +302,29 @@ function loop() {
         shiftToTarget(bullet, MAP, data.direction);
         item.destroy(data.direction)
         friendlyItems.forEach((friend) => {
+          const clones = []
+          if(data.direction === 'west' || data.direction === 'east') {
+            const clone1 = JSON.parse(JSON.stringify(bullet.getData()))
+            clone1.coords.y -= clone1.height
+            clones.push(clone1)
+            const clone2 = JSON.parse(JSON.stringify(bullet.getData()))
+            clone2.coords.y += clone2.height
+            clones.push(clone2)
+          }
+          
+          if(data.direction === 'north' || data.direction === 'south') {
+            const clone1 = JSON.parse(JSON.stringify(bullet.getData()))
+            clone1.coords.x -= clone1.width
+            clones.push(clone1)
+            const clone2 = JSON.parse(JSON.stringify(bullet.getData()))
+            clone2.coords.x += clone2.width
+            clones.push(clone2)
+          }
           console.log(collides(friend, bullet.getData()))
-          if (collides(friend, bullet.getData())) {
+          if (collides(friend, clones[0)) {
+            friend.destroy(data.direction)
+          }
+          if (collides(friend, clones[1)) {
             friend.destroy(data.direction)
           }
         })
