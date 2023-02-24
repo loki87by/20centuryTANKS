@@ -321,10 +321,10 @@ function loop() {
             clones.push(clone2)
           }
           console.log(collides(friend, bullet.getData()))
-          if (collides(friend, clones[0)) {
+          if (collides(friend, clones[0])) {
             friend.destroy(data.direction)
           }
-          if (collides(friend, clones[1)) {
+          if (collides(friend, clones[1])) {
             friend.destroy(data.direction)
           }
         })
