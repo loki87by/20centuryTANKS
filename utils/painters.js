@@ -40,6 +40,8 @@ export function setBrick(x, y, w, h, part) {
   C.CTX.lineWidth = 1;
       C.CTX.moveTo(x, y);
       C.CTX.lineTo(x, y + h / 2);
+      C.CTX.moveTo(x + w, y + h / 2);
+      C.CTX.lineTo(x + w, y + h);
   C.CTX.lineWidth = 2;
     }
   }
