@@ -12,21 +12,25 @@ export default class Wall extends Entity {
     return data;
   }
 
-  changeBricks(direction) {
-    if (direction === "south") {
-      this.bricks.pop();
-    } else if (direction === "north") {
-      this.bricks.unshift();
-    } else {
-      this.bricks.forEach((brick) => {
-        if (direction === "west") {
-          brick.pop();
-        }
+  destroy(direction) {
+    if (this.type.length > 1) {
+      return false;
+    }
 
-        if (direction === "east") {
-          brick.unshift();
-        }
-      });
+    if (direction === "south") {
+      this.type += "-up";
+      this.height /= 2
+    } else if (direction === "north") {
+      this.type += "-down";
+      this.coords.y += this.height / 2 
+      this.height /= 2
+    } else if (direction === "west") {
+      this.type += "-left";
+      this.width /= 2
+    } else {
+      this.type += "-right";
+      this.coords.x += this.width / 2 
+      this.width /= 2
     }
   }
 }

@@ -1,6 +1,9 @@
 import * as C from "./consts.js";
 
-export function setBrick(x, y, w, h) {
+export function setBrick(x, y, w, h, part) {
+  if (part) {
+    console.log(part);
+  }
   C.CTX.fillStyle = "firebrick";
   C.CTX.fillRect(x, y, w, h);
   C.CTX.strokeStyle = "grey";
@@ -10,11 +13,39 @@ export function setBrick(x, y, w, h) {
   C.CTX.moveTo(x, y + h - 1);
   C.CTX.lineTo(x + w - 1, y + h - 1);
   C.CTX.lineWidth = 2;
-  C.CTX.lineTo(x + w - 1, y + h / 2 - 1);
-  C.CTX.moveTo(x, y + h / 2 - 1);
-  C.CTX.lineTo(x + w, y + h / 2 - 1);
-  C.CTX.moveTo(x + w / 2 - 1, y);
-  C.CTX.lineTo(x + w / 2 - 1, y + h / 2);
+
+  if (!part) {
+    C.CTX.lineTo(x + w - 1, y + h / 2 - 1);
+  }
+
+  if (part === "up") {
+    C.CTX.lineTo(x + w - 1, y + h - 1);
+  }
+
+  if (part !== "up" || part !== "down") {
+    C.CTX.moveTo(x, y + h / 2 - 1);
+    C.CTX.lineTo(x + w, y + h / 2 - 1);
+
+    if (!part) {
+      C.CTX.moveTo(x + w / 2 - 1, y);
+      C.CTX.lineTo(x + w / 2 - 1, y + h / 2);
+    }
+
+    if (part === "left") {
+      C.CTX.moveTo(x + w / 2 - 1, y / 2);
+      C.CTX.lineTo(x + w / 2 - 1, y + h / 2);
+    }
+
+    if (part === "right") {
+      C.CTX.moveTo(x, y);
+      C.CTX.lineTo(x, y + h / 2);
+    }
+  }
+
+  if (part === "down") {
+    C.CTX.moveTo(x + w / 2 - 1, y);
+    C.CTX.lineTo(x + w / 2 - 1, y + h);
+  }
   C.CTX.stroke();
 }
 
@@ -127,28 +158,27 @@ export function setTank(x, y, dir, gamer) {
 }
 
 export function setBullet(x, y, dir, gun) {
-  let size = Math.floor(2 * C.POINT)
+  let size = Math.floor(2 * C.POINT);
 
   if (gun) {
-    size = Math.floor(4 * C.POINT)
+    size = Math.floor(4 * C.POINT);
   }
 
   C.CTX.fillStyle = "white";
 
-  if(dir === 'north') {
+  if (dir === "north") {
     C.CTX.fillRect(x - size / 2, y - 3 * size, size, 3 * size);
   }
 
-  if(dir === 'south') {
+  if (dir === "south") {
     C.CTX.fillRect(x - size / 2, y, size, 3 * size);
   }
 
-  if(dir === 'west') {
+  if (dir === "west") {
     C.CTX.fillRect(x - 3 * size, y - size / 2, 3 * size, size);
   }
 
-  if(dir === 'east') {
+  if (dir === "east") {
     C.CTX.fillRect(x, y - size / 2, 3 * size, size);
   }
-
 }

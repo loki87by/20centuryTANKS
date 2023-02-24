@@ -72,7 +72,6 @@ function endCanvas(obj, x, y) {
 //events
 function tankControls(e) {
   if (e.code === "Space") {
-    console.log(BULLETS.some((i) => i.owner == TANKS[0].id));
     if (BULLETS.some((i) => i.owner == TANKS[0].id)) {
       return;
     }
@@ -185,11 +184,6 @@ function tankControls(e) {
         POINT * 530 - TANKS[0].getData().width,
         TANKS[0].getData().coords.y
       );
-      /* TANKS[0].replace(
-        POINT * 530 - TANKS[0].getData().width,
-        TANKS[0].getData().coords.y
-      );
-      TANKS[0].stop(); */
       return;
     }
 
@@ -240,8 +234,13 @@ function loop() {
   MAP.forEach((item) => {
     const data = item.getData();
 
-    if (data.type === "b") {
-      setBrick(data.coords.x, data.coords.y, data.width, data.height);
+    if (data.type[0] === "b") {
+      if (data.type === "b") {
+        setBrick(data.coords.x, data.coords.y, data.width, data.height);
+      } else {
+        const part = data.type.replace("b-", "");
+        setBrick(data.coords.x, data.coords.y, data.width, data.height, part);
+      }
     }
 
     if (data.type === "s") {
@@ -291,7 +290,10 @@ function loop() {
     bullet.replace(data.coords.x + data.dx, data.coords.y + data.dy);
     MAP.forEach((item) => {
       if (collides(item, bullet.getData().prestep)) {
-        bullet.stop();
+        shiftToTarget(bullet, MAP, data.direction);
+        console.log(item, bullet, data.direction);
+        item.destroy(data.direction)
+        //BULLETS.splice(index, 1);
       }
     });
   });
