@@ -221,6 +221,7 @@ screenSize();
 
 function loop() {
   frame = requestAnimationFrame(loop);
+    console.log(count)
 
   if (++count < 300 - Math.floor(POINT)) {
     console.log(count)
