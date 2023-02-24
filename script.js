@@ -291,6 +291,7 @@ function loop() {
     MAP.forEach((item) => {
       if (collides(item, bullet.getData().prestep)) {
         shiftToTarget(bullet, MAP, data.direction);
+        console.log(item, bullet)
         item.destroy(data.direction)
       }
     });
