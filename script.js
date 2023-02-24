@@ -51,13 +51,13 @@ const tank = new Tank(
 TANKS.push(tank);
 
 function shiftToTarget(shifting, targets, direction) {
-  console.log(shifting, targets, direction)
+  //console.log(shifting, targets, direction)
   const index = targets.findIndex((item) =>
     collides(item, shifting.getData().prestep)
   );
-  console.log(index)
+  //console.log(index)
   const { x, y } = getCollideCoords(targets[index], shifting, direction);
-  console.log(x,y)
+  //console.log(x,y)
   shifting.replace(x, y);
   shifting.stop();
   console.log(shifting)
@@ -108,12 +108,12 @@ function tankControls(e) {
     ) {
       TANKS[0].step();
     } else {
-      //shiftToTarget(TANKS[0], MAP, direction);
-      const index = MAP.findIndex((item) =>
+      shiftToTarget(TANKS[0], MAP, direction);
+      /* const index = MAP.findIndex((item) =>
         collides(item, TANKS[0].getData().prestep)
       );
       const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
-      TANKS[0].replace(x, y);
+      TANKS[0].replace(x, y); */
   TANKS[0].stop();
     }
   }
