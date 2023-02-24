@@ -109,11 +109,11 @@ function tankControls(e) {
       TANKS[0].step();
     } else {
       shiftToTarget(TANKS[0], MAP, direction);
-      /* const index = MAP.findIndex((item) =>
+      const index = MAP.findIndex((item) =>
         collides(item, TANKS[0].getData().prestep)
       );
       const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
-      TANKS[0].replace(x, y); */
+      TANKS[0].replace(x, y);
   TANKS[0].stop();
     }
   }
