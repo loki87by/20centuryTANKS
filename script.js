@@ -293,25 +293,24 @@ function loop() {
           if(data.direction === 'north' || data.direction === 'south') {
             friendlyItems = [left, right].filter(i => i !== undefined)
           }
-        console.log(friendlyItems)
         shiftToTarget(bullet, MAP, data.direction);
         item.destroy(data.direction)
         friendlyItems.forEach((friend) => {
           const clones = []
           if(data.direction === 'west' || data.direction === 'east') {
-            const clone1 = JSON.parse(JSON.stringify(bullet.getData()))
+            const clone1 = JSON.parse(JSON.stringify(bullet.getData().prestep))
             clone1.coords.y -= clone1.height
             clones.push(clone1)
-            const clone2 = JSON.parse(JSON.stringify(bullet.getData()))
+            const clone2 = JSON.parse(JSON.stringify(bullet.getData().prestep))
             clone2.coords.y += clone2.height
             clones.push(clone2)
           }
           
           if(data.direction === 'north' || data.direction === 'south') {
-            const clone1 = JSON.parse(JSON.stringify(bullet.getData()))
+            const clone1 = JSON.parse(JSON.stringify(bullet.getData().prestep))
             clone1.coords.x -= clone1.width
             clones.push(clone1)
-            const clone2 = JSON.parse(JSON.stringify(bullet.getData()))
+            const clone2 = JSON.parse(JSON.stringify(bullet.getData().prestep))
             clone2.coords.x += clone2.width
             clones.push(clone2)
           }
