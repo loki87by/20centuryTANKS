@@ -313,6 +313,7 @@ function loop() {
   });
 }
 
-frame = requestAnimationFrame(loop);
+//frame = 
+  requestAnimationFrame(loop);
 document.addEventListener("keydown", tankControls);
 document.addEventListener("keyup", tankStopped);
