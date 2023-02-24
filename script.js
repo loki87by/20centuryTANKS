@@ -114,6 +114,7 @@ function tankControls(e) {
       );
       const { x, y } = getCollideCoords(MAP[index], TANKS[0], direction);
       TANKS[0].replace(x, y);
+  shifting.stop();
     }
   }
 
