@@ -222,7 +222,7 @@ screenSize();
 function loop() {
   frame = requestAnimationFrame(loop);
 
-  if (++count < 30 - Math.floor(POINT)) {
+  if (++count < 300 - Math.floor(POINT)) {
     return;
   }
 
