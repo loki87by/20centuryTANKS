@@ -292,15 +292,23 @@ function loop() {
       if (collides(item, bullet.getData().prestep)) {
         shiftToTarget(bullet, MAP, data.direction);
         console.log(item, bullet)
-        const top = MAP.find(i => i.coords.x === item.coords.x && i.coords.y === item.coords.y - item.height)
-        const bottom = MAP.find(i => i.coords.x === item.coords.x && i.coords.y === item.coords.y + item.height)
-        const left = MAP.find(i => i.coords.x === item.coords.x - item.width && i.coords.y === item.coords.y)
-        const right = MAP.find(i => i.coords.x === item.coords.x + item.width && i.coords.y === item.coords.y)
+        const top = MAP.find((i) => {
+          if(i.coords.x === item.coords.x && i.coords.y === item.coords.y - item.height) {
+            return i}})
+        const bottom = MAP.find((i) => {
+          if(i.coords.x === item.coords.x && i.coords.y === item.coords.y + item.height) {
+            return i}})
+        const left = MAP.find((i) => {
+          if(i.coords.x === item.coords.x - item.width && i.coords.y === item.coords.y) {
+            return i}})
+        const right = MAP.find((i) => {
+          if(i.coords.x === item.coords.x + item.width && i.coords.y === item.coords.y) {
+            return i}})
         const friendlyItems = [top, bottom, left, right]
         console.log(friendlyItems)
         item.destroy(data.direction)
         friendlyItems.forEach((friend) => {
-          if (collides(friend, bullet.getData().prestep)) {
+          if (collides(friend, bullet.getData())) {
             friend.destroy(data.direction)
           }
         })
