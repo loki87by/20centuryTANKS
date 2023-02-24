@@ -12,8 +12,8 @@ const requestAnimationFrame =
   window.msRequestAnimationFrame;
 
 let level = 0;
-let count = 0;
-let frame = null;
+//let count = 0;
+//let frame = null;
 const MAP = [];
 const TANKS = [];
 const BULLETS = [];
@@ -220,15 +220,16 @@ function tankStopped(e) {
 screenSize();
 
 function loop() {
-  frame = requestAnimationFrame(loop);
-    console.log(count)
+  //frame = 
+    requestAnimationFrame(loop);
+    /*console.log(count)
 
   if (++count < 300 - Math.floor(POINT)) {
     console.log(count)
     return;
   }
 
-  count = 0;
+  count = 0;*/
   CTX.clearRect(0, 0, POINT * 540, POINT * 540);
   CTX.fillStyle = "lightgrey";
   CTX.fillRect(0, 0, POINT * 540, POINT * 540);
