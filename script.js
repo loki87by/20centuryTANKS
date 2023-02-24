@@ -223,6 +223,7 @@ function loop() {
   frame = requestAnimationFrame(loop);
 
   if (++count < 300 - Math.floor(POINT)) {
+    console.log(count)
     return;
   }
 
